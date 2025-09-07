@@ -82,7 +82,7 @@ python manage.py migrate
 
 
 # Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara `urls.py`, `views.py`, `models.py`, dan berkas `html`.
-- ![bagan](https://drive.google.com/file/d/1LQExL_O0giAiTYe3t-gp3JdzbagXQGlg/view?usp=sharing)
+- ![bagan](https://drive.google.com/uc?export=view&id=1LQExL_O0giAiTYe3t-gp3JdzbagXQGlg)
 - Pertama-tama, `urls.py` menerima url request dari server, jika cocok maka diteruskan ke `views.py`, dimana `models.py` akan digunakan jika perlu, lalu `views.py` akan meneruskan data ke template atau file `html` yang telah dibuat. 
 
 
