@@ -181,7 +181,11 @@ python manage.py migrate
 - Asdos siap membantu walaupun pertanyaannya terkesan basic atau tidak terlalu penting.
 
 ### Screenshot 4 URL di Postman
-- ![showxml](https://drive.google.com/uc?export=view&id=1LQExL_O0giAiTYe3t-gp3JdzbagXQGlg)
-- ![showjson](https://drive.google.com/uc?export=view&id=1LQExL_O0giAiTYe3t-gp3JdzbagXQGlg)
-- ![showxmlById](https://drive.google.com/uc?export=view&id=1LQExL_O0giAiTYe3t-gp3JdzbagXQGlg)
-- ![showjsonById](https://drive.google.com/uc?export=view&id=1LQExL_O0giAiTYe3t-gp3JdzbagXQGlg)
+- XML: 
+- ![showxml](https://drive.google.com/file/d/1nO0jPqjrvKsF1QFex9YztDKFGFmwAFJg/view?usp=drive_link)
+- JSON:
+- ![showjson](https://drive.google.com/file/d/1ONyHHAfuBocc689jjjilooe7v2j9QuQW/view?usp=sharing)
+- XMLByID:
+- ![showxmlById](https://drive.google.com/file/d/1tYWPmenJZaxUBsa_4jG5kdFo_ONxxbwb/view?usp=sharing)
+- JSONByID
+- ![showjsonById](https://drive.google.com/file/d/1j3QGGluPukBRkFE1kNi4CSUL92B9VosY/view?usp=drive_link)
