@@ -2,6 +2,7 @@
 {% block content %}
 <title>⚽ 🏆 Toko SlopShop ⚽ 🏆</title>
 <h1>{{ Aplikasi }}</h1>
+<p>Selamat Melihat Produk</p>
 
 <h5>NPM: </h5>
 <p>{{ npm }}</p>
@@ -13,8 +14,19 @@
 <a href="{% url 'main:create_product' %}">
   <button>+ Add Product</button>
 </a>
-
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+<h5>Logged in as: {{ logged }}</h5>
+<h5>Sesi terakhir login: {{ last_login }}</h5>
 <hr>
+
+<a href="?filter=all">
+    <button type="button">All Articles</button>
+</a>
+<a href="?filter=my">
+    <button type="button">My Articles</button>
+</a> 
 
 {% if not product_list %}
 <p>Belum ada data Produk pada Toko.</p>
@@ -25,8 +37,12 @@
   <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
 
   <p><b>{{ product.get_category_display }}</b>{% if product.is_featured %} | 
-    <b>Featured</b>{% endif %}
-</p>
+    <b>Featured</b>{% endif %} | 
+    {% if product.user %}
+        Penjual: {{ product.user.username }}</p>
+    {% else %}
+       Penjual: Anonymous
+    {% endif %}</p>
 
   {% if product.thumbnail %}
   <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
