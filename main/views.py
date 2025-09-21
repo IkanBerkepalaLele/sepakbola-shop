@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from main.forms import ProductForm
 from main.models import Product
-from django.http import HttpResponse
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core import serializers
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
@@ -15,7 +13,7 @@ from django.urls import reverse
 @login_required(login_url='/login')
 def show_main(request):
     filter_type = request.GET.get("filter", "all")  # default 'all'
-
+    
     if filter_type == "all":
         product_list = Product.objects.all()
     else:
@@ -31,6 +29,8 @@ def show_main(request):
         'product_list': product_list,
         'last_login': request.COOKIES.get('last_login', 'Never')
     }
+    if not request.user.is_authenticated:
+        return redirect('main:login')
 
     return render(request, "main.html", context)
 

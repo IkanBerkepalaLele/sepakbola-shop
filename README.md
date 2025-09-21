@@ -192,3 +192,116 @@ python manage.py migrate
 
 - JSONByID:  
 ![showjsonById](https://drive.google.com/uc?export=view&id=1j3QGGluPukBRkFE1kNi4CSUL92B9VosY)
+
+
+
+# TUGAS 4
+## Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+- Django AuthencticationForm adalah fungsi bawaan django yang berfungsi untuk proses "login" yang dilakukan oleh user, lalu akan diberikan form yang memiliki field username dan password. Setelah selesai, fungsi tersebut akan mengembalikan objek "user" dari user. 
+- Kelebihan dari Django AuthenticationForm adalah developer tidak perlu membuat form login baru, mudah dipakai, serta langsung terintegrasi dengan sistem django.
+- Namun, fungsi ini mempunyai kekurangan sangat sederhana dalam segi UI maupun UX. Hanya memperlihatkan field username dan password yang harus diisi yang terkesan barebone.
+
+## Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+- Autentikasi adalah proses memverifikasi identitas suatu orang.
+- Sedangkan otorisasi adalah proses menentukan hak akses terhadap sesuatu setelah identitas orang tersebut diketahui.
+- Django mengimplementasikan autentikasi dengan fungsi-fungsi bawaan pada library `django.contrib.auth` yang berisi segala sesuatu tentang autentikasi, seperti login, logout, dan authenticate.
+- Sedangkan untuk otorisasi, django memiliki fungsi yang melihat apakah suatu user memiliki izin untuk suatu fungsi, seperti user.has.perm(). Ada pula decorators seperti @login_required, yang hanya mengizinkan user yang sudah tersimpan untuk mengakses suatu fungsi.
+
+## Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
+- Kelebihannya session dan cookies adalah user tidak perlu login berkali-kali jika semisal user berpindah dari satu web ke lainnya. Cookies lebih mudah digunakan, session lebih aman karena disimpan di server. 
+- Kekurangannya cookies adalah, tidak aman, ukuran terbatas, dan data tersebut dicuri oleh penyerang, yang membuat penyerang tersebut bisa memiliki terhadap akun jika cookie tidak direset. 
+- Kekurangan session adalah, jika cookies di curi oleh penyerang, penyerang bisa mengambil akses session yang sedang berlangsung. Session juga hanya bertahan sampai user logout atau tutup web, berbeda dengan cookies yang disimpan secara local.
+
+##  Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+- Cookies tidak selalu aman, karena sifat cookies yang disimpan secara lokal, jadi semisal developer menyimpan username atau password ataupun informasi penting lainnya, cookie tersebut bisa diambil melalui malware cookie stealer, XSS, dan CSRF. 
+- Django menangani hal ini dengan membuat server-side session. Jadi informasi penting yang sebelumnya disimpan pada cookie, sekarang disimpan pada server dan cookie hanya menyimpan SessionID. Jadi semisal cookie yang ada di client dicuri, cookie tersebut hanya valid sampe session itu berakhir saja. 
+
+##  Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+###  Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna mengakses aplikasi sebelumnya sesuai dengan status login/logoutnya.
+- Pertama, import dulu libary-libary yang dibutuhkan, yaitu library `django.contrib.auth` yang menyimpan fungsi2 login, serta decoratornya. 
+- Lalu buat fungsi register yang isinya seperti ini: 
+```
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+```
+- Fungsi ini akan membuat form untuk register menggunakan `UserCreationForm` yang merupakan form bawaan django untuk penambahan user. For ini memiliki field Username dan Password. Fungsi ini akan dipanggil melalui /register.html
+- Sebelum fungsi bisa dipanggil lewat html tersebut, buat dulu routing pada urls.py yang mengarah ke register.html. Html tersebut singkatnya hanya berfungsi untuk menampilkan `UserCreationForm` dengan method `POST`.
+- Lalu buat fungsi login yang isinya seperti ini:
+```
+def login_user(request):
+   if request.method == 'POST':
+      form = AuthenticationForm(data=request.POST)
+
+      if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+
+   else:
+      form = AuthenticationForm(request)
+   context = {'form': form}
+   return render(request, 'login.html', context)
+```
+- Fungsi ini dipanggil melalui /login, jadi buat routingnya terlebih dahulu. Fungsi ini membuat form login dari `AuthenticationForm`, lalu fungsi akan mengambil user dan diteruskan ke fungsi login django `login(request, user)`. Setelah itu user bisa masuk ke website.
+- Lalu buat web login dengan membuat login.html. Di page ini user bisa login dengan memasukkan kredensialnya, atau tersedia button yang memanggil fungsi register. 
+- Tidak lupa tambahkan decorator `@login_required(login_url='/login')` pada fungsi `show_main` dan `show_product` agar hanya user terdaftar yang bisa mengakses 2 fungsi tersebut, jika user belum terdaftar atau belum login, redirect ke page login.
+- Lalu buat fungsi logout yang isinya seperti ini:
+```
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+```
+- Fungsi ini dipanggil melalui /logout, jadi tambahkan routing pada urls.py dulu. Fungsi digunakan jika user ingin logout dengan cara memanggil logout(request) yang menghapus data session di server, lalu redirect ke halaman login. 
+- Fungsi ini bisa dipanggil lewat main.html. Jadi ketika user ingin logout, tinggal pencet button yang ada di page main. Potongan kode buttonnya seperti ini:
+```
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+```
+###  Membuat dua (2) akun pengguna dengan masing-masing tiga (3) dummy data menggunakan model yang telah dibuat sebelumnya untuk setiap akun di lokal.
+- Buat akun baru, lalu tambahkan product dengan isi field-field yang tersedia, ulangi 3x.
+- Lalu lakukan lagi untuk akun selanjutnya.
+
+###  Menghubungkan model Product dengan User.
+- Pertama, buat dulu field user pada models. Lalu tambahkan bagian kode pada views.py, spesifiknya pada create_product:
+```        
+        product_entry = form.save(commit = False)
+        product_entry.user = request.user
+        product_entry.save()
+```
+- Pada bagian ini, field user akan diisi dengan user yang sedang terlogin pada saat ini, jadi membuat hubungan one to many antara user dengan product.
+
+###  Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last_login pada halaman utama aplikasi.
+- Pada main.html, ditambahkan kode ini:
+```
+<h5>Logged in as: {{ logged }}</h5>
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+<hr>
+```
+- Potongan kode ini akan mengambil pengguna yang sedang logged dan waktu last_login yang diambil dari context showmain pada views.py yang berisi seperti ini:
+```
+    context = {
+        'npm' : '2406495565',
+        'name' : 'Ghozam Muliawan Sholihin',
+        'logged': request.user.username,
+        'class': 'PBP C',
+        'Aplikasi' : 'SlopShop',
+        'product_list': product_list,
+        'last_login': request.COOKIES.get('last_login', 'Never')
+    }
+```
+- Pada potongan kode tersebut, variabel logged diambil dari user yang sedang terlogin pada saat itu dan diambil usernamenya.
+- Sedangkan last_login adalah variabel yang mengambil waktu last_login dari cookies, ketika variabel tersebut ada isinya, maka ambil isi tersebut. Jika tidak ada isi, maka tampilkan 'Never"
