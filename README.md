@@ -305,3 +305,122 @@ def logout_user(request):
 ```
 - Pada potongan kode tersebut, variabel logged diambil dari user yang sedang terlogin pada saat itu dan diambil usernamenya.
 - Sedangkan last_login adalah variabel yang mengambil waktu last_login dari cookies, ketika variabel tersebut ada isinya, maka ambil isi tersebut. Jika tidak ada isi, maka tampilkan 'Never"
+
+
+# TUGAS 5
+## Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+- CSS selector memiliki hierarki pengambilan seperti ini:
+- 1. Kode dengan inline style `<p style="color: red;">Teks ini pasti merah</p>`
+- 2. ID Selector `(#title)`
+- 3. Class, pseudo-class, dan attribute `(.class, :hover, [type="text"])`
+- 4. Tag/Type selector `(p, h1, div)` dan Universal selector `(*)`
+- Lalu ketika ada 2 selector dengan tingkat hierarki yang sama, maka selector yang paling bawah/terakhir lah yang dipakai oleh CSS.
+
+## Mengapa responsive design menjadi konsep yang penting da lam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+-  Karena responsive design membuat sebuah web menjadi lebih ramah untuk semua gadget, mau itu handphone, tablet, maupun desktop. Sehingga tidak hanya user desktop saja yang bisa melihat web cantik, namun semua user pun bisa, yang mengakibatkan UX dari gadget lain menjadi lebih baik.
+- Contoh Web yang sudah menerapkan responsive design adalah `https://scele.cs.ui.ac.id/`, web scele kita. Karena ketika disimulate, web tersebut responsif, dimana ukuran2 objeknya berubah untuk menyesuaikan layar hp. 
+- Contoh Web yang belum menerapkan responsive design adalah `https://www.tokopedia.com/`. Karena tidak ada perubahan ketika disimulasikan melalui hp, Tokopedia sepertinya sudah fokus pada dedicated appnya untuk platform mobile, jadi platform webnya ditinggalkan. 
+
+## Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+- Margin adalah ruang tidak berwarna diluar border yang memisahkan objek dari objek lain.
+- Border adalah adalah garis bingkai elemen yang berada diantara padding dan margin.
+- Padding adalah ruang kosong diantara konten dan border.
+- Implementasinya di CSS:
+```
+* {
+    margin : 67px; <- Margin
+    padding : 69px: <- Padding
+    border : 4x dashed black; <- Border
+}
+```
+- ![MarginBorderPadding](https://pbp-fasilkom-ui.github.io/ganjil-2026/assets/images/t4-1-833b8ee0d0dd53959be9b66d452cd1d6.png)
+- Sumber: Tutorial PBP Fasilkom UI
+
+## Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+- Flexbox adalah konsep layout 1 dimensi, dimana objek hanya bisa ditambahkan keatas maupun kesamping, namun tidak 2-2nya. 
+- Kalau grid, dia adalah konsep layout 2 dimensi, dimana objek bisa ditambahkan keatas maupun kesamping. 
+
+## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+### Implementasikan fungsi untuk menghapus dan mengedit product.
+- untuk mengimplementasikan fungsi edit, pada views.py, tambahkan kode seperti ini:
+```
+@login_required(login_url='/login')
+def edit_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_product.html", context)
+```
+- Fungsi ini mengambil produk yang sudah ada, lalu membuat dan mengisi form dengan produk yang diambil tadi. Sehingga pengguna bisa mengedit produk yang sudah ada di database. 
+- Tambahkan edit_product.html yang menampung form tersebut. 
+- Lalu untuk fungsi delete, tambahkan kode seperti ini: 
+```
+@login_required(login_url='/login')
+def delete_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+```
+- Fungsi tersebut mengambil produk berdasarkan id, lalu mendeletenya dengan `.delete()`.
+- Jangan lupa tambahkan routing pada urls.py
+```
+    path('product/<uuid:id>/delete', delete_product, name='delete_product'),
+    path('product/<uuid:id>/edit', edit_product, name='edit_product'),
+```
+
+### Kustomisasi desain pada template HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut:
+#### Kustomisasi halaman login, register, tambah product, edit product, dan detail product semenarik mungkin.
+- Hampir sama seperti tutorial, tapi saya tambah-tambahkan shadow effect (shadow-lg) pada box, lalu hover effects pada button-buttonnya. 
+
+#### Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Kemudian, perhatikan kondisi berikut:
+##### Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
+- Pada main.html, tambahkan seksi
+```
+{% if not news_list %}
+
+        ...
+        <div class="w-32 h-32 mx-auto mb-4">
+          <img src="{% static 'image/no-product.png' %}" alt="No product available" class="w-full h-full object-contain">
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">gak ada produk/h3>
+        <p class="text-gray-500 mb-6">produk masih kosong.</p>
+        ...
+
+{% else %}
+        ...
+{% endif %}
+```
+- Di bagian kode itu, jika tidak ada produk, maka page akan menampilkan image dan pesan kalau tidak ada produk yang terdaftar.
+#### Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card (tidak boleh sama persis dengan desain pada Tutorial!).
+- Punya saya tidak jauh berbeda dengan yang di tutorial, namun saya modif sedikit banner-bannernya yang akan menunjukkan harga, banner miring untuk category, dan hover effects agar lebih menarik. 
+
+#### Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+- Tambahkan ini pada file html:
+```
+          <a href="{% url 'main:edit_product' product.id %}" class="text-gray-700 text-sm">Edit</a>
+          <a href="{% url 'main:delete_product' product.id %}" class="text-red-700 text-sm">Delete</a>
+```
+- Bagian kode ini akan menampilkan text yang akan memangil fungsi edit dan delete pada views.py yang sudah ter-route dengan benar.
+
+
+#### Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+- Tambahkan 2 bagian kode yang berbeda untuk mobile dan desktop.
+- Jadi untuk bagian desktop tambahkan bagian kode ini:
+```
+        <div class="hidden md:flex items-center space-x-8">
+``` 
+- jadi ketika layar "md" atau medium dan lebih besar, maka akan flex atau menunjukkan menunya, dan hidden secara default untuk lainnya
+- Lalu untuk bagian mobile tambahkan kode ini:
+```
+        <div class="md:hidden flex items-center">
+```
+- Yang dimana menu hamburger akan hide kalau screen adalah md atau lebih besar, dan show untuk layar yang lebih kecil daripada itu.
+
+

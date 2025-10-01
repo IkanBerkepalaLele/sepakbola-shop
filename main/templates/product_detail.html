@@ -1,22 +1,106 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<title>{{ product.name }} - ⚽ 🏆 Toko SlopShop ⚽ 🏆</title>
+{% endblock meta %}
+
 {% block content %}
-<title>{{ product.name }}</title>
-<p><a href="{% url 'main:show_main' %}"><button>← Back to product List</button></a></p>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Back Navigation -->
+        <div class="mb-6">
+            <a href="{% url 'main:show_main' %}" class="text-black-300 hover:text-black font-medium transition-colors">
+                ← Back to Products
+            </a>
+        </div>
+        
+        <!-- Article -->
+        <article class="bg-white rounded-lg border border-gray-200 shadow-2xl overflow-hidden">
+            
+            <!-- Header -->
+            <div class="p-6 sm:p-8">
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-green-600 text-white">
+                        {{ product.get_category_display }}
+                    </span>
+                    {% if product.is_featured %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-500 text-white">
+                            Featured
+                        </span>
+                    {% endif %}
+                    {% if product.stock <= 0 %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-red-600 text-white">
+                            OUT OF STOCK
+                        </span>
+                    {% endif %}
+                </div>
+                
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-6">
+                    {{ product.name }}
+                </h1>
+                
+                <!-- Price and Stock -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-200">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Price</p>
+                        <p class="text-3xl font-bold text-green-600">Rp. {{ product.price|intcomma }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Stock</p>
+                        <p class="text-2xl font-semibold {% if product.stock <= 0 %}text-red-600{% elif product.stock < 10 %}text-yellow-600{% else %}text-gray-900{% endif %}">
+                            {{ product.stock }} units
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-<h1>{{ product.name }}</h1>
-<p><b>{{ product.get_category_display }}</b>{% if product.is_featured %} | 
-    <b>Featured</b>{% endif %} |     {% if product.user %}
-        Penjual: {{ product.user.username }}
-    {% else %}
-       Penjual: Anonymous
-    {% endif %}
-</p>
+            <!-- Featured Image -->
+            {% if product.thumbnail %}
+                <div class="px-6 sm:px-8 mb-8">
+                    <img src="{{ product.thumbnail }}" 
+                         alt="{{ product.name }}" 
+                         class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
+                </div>
+            {% endif %}
 
-{% if product.thumbnail %}
-<img src="{{ product.thumbnail }}" alt="product thumbnail" width="300">
-<br /><br />
-{% endif %}
-<p>Price: {{ product.price }} | Stock: {{ product.stock }}</p>
-<p>{{ product.description }}</p>
+            <!-- Content -->
+            <div class="p-6 sm:p-8">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Description</h2>
+                <div class="prose prose-lg max-w-none">
+                    <div class="text-gray-700 leading-relaxed whitespace-pre-line text-base sm:text-lg">
+                        {{ product.description }}
+                    </div>
+                </div>
+            </div>
 
+            <!-- Author Info -->
+            <div class="border-t border-gray-200 p-6 sm:p-8 bg-gray-50">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Seller</p>
+                        <div class="font-medium text-gray-900">
+                            {% if product.user %}
+                                {{ product.user.username }}
+                            {% else %}
+                                Anonymous
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if user.is_authenticated and product.user == user %}
+                        <div class="flex gap-3">
+                            <a href="{% url 'main:edit_product' product.id %}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+                                Edit Product
+                            </a>
+                            <a href="{% url 'main:delete_product' product.id %}" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                                Delete Product
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
 {% endblock content %}
