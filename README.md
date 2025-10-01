@@ -1,4 +1,4 @@
-- Web tugas bisa diakses melalui: https://ghozam-muliawan-sepakbolashop.pbp.cs.ui.ac.id/?
+- Web tugas bisa diakses melalui: https://ghozam-muliawan-sepakbolashop.pbp.cs.ui.ac.id/
 
 # TUGAS 2
 
@@ -321,7 +321,11 @@ def logout_user(request):
 ## Mengapa responsive design menjadi konsep yang penting da lam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
 -  Karena responsive design membuat sebuah web menjadi lebih ramah untuk semua gadget, mau itu handphone, tablet, maupun desktop. Sehingga tidak hanya user desktop saja yang bisa melihat web cantik, namun semua user pun bisa, yang mengakibatkan UX dari gadget lain menjadi lebih baik.
 - Contoh Web yang sudah menerapkan responsive design adalah `https://scele.cs.ui.ac.id/`, web scele kita. Karena ketika disimulate, web tersebut responsif, dimana ukuran2 objeknya berubah untuk menyesuaikan layar hp. 
+![SceleDesktop](https://drive.google.com/uc?export=view&id=1Gs-ExRU0-nifgXKCmDgHNa7B9lHjIRBP)
+![SceleMobile](https://drive.google.com/uc?export=view&id=1Ib9xx4P3QXzN8xXluNaSVUQOka3oX7-k)
 - Contoh Web yang belum menerapkan responsive design adalah `https://www.tokopedia.com/`. Karena tidak ada perubahan ketika disimulasikan melalui hp, Tokopedia sepertinya sudah fokus pada dedicated appnya untuk platform mobile, jadi platform webnya ditinggalkan. 
+![TokopediaDesktop](https://drive.google.com/uc?export=view&id=1cSBYWkpiO9ZFfmUNxqt9Bi-efdlldFbL)
+![TokopediaMobile](https://drive.google.com/uc?export=view&id=1K_Teo42DjwFeEdfgG2j0OBV0qzt61ehu)
 
 ## Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
 - Margin adalah ruang tidak berwarna diluar border yang memisahkan objek dari objek lain.
@@ -335,7 +339,7 @@ def logout_user(request):
     border : 4x dashed black; <- Border
 }
 ```
-- ![MarginBorderPadding](https://pbp-fasilkom-ui.github.io/ganjil-2026/assets/images/t4-1-833b8ee0d0dd53959be9b66d452cd1d6.png)
+![MarginBorderPadding](https://pbp-fasilkom-ui.github.io/ganjil-2026/assets/images/t4-1-833b8ee0d0dd53959be9b66d452cd1d6.png)
 - Sumber: Tutorial PBP Fasilkom UI
 
 ## Jelaskan konsep flex box dan grid layout beserta kegunaannya!
@@ -400,6 +404,7 @@ def delete_product(request, id):
 {% endif %}
 ```
 - Di bagian kode itu, jika tidak ada produk, maka page akan menampilkan image dan pesan kalau tidak ada produk yang terdaftar.
+![NoProduct](https://drive.google.com/uc?export=view&id=1XPmz6LAbrO3WuZ7NF9RqfJAcdFveI1qm)
 #### Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card (tidak boleh sama persis dengan desain pada Tutorial!).
 - Punya saya tidak jauh berbeda dengan yang di tutorial, namun saya modif sedikit banner-bannernya yang akan menunjukkan harga, banner miring untuk category, dan hover effects agar lebih menarik. 
 
