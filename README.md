@@ -1,3 +1,5 @@
+- Web tugas bisa diakses melalui: https://ghozam-muliawan-sepakbolashop.pbp.cs.ui.ac.id/?
+
 # TUGAS 2
 
 ## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step.
