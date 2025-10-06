@@ -1,6 +1,8 @@
+- Repository Tugas Inidividu Pemograman Berbasis PBP (Pemrograman Berbasis Platform)
 - Web tugas bisa diakses melalui: https://ghozam-muliawan-sepakbolashop.pbp.cs.ui.ac.id/
 
-# TUGAS 2
+<details>
+  <summary><strong>Tugas 2</strong></summary>
 
 ## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step.
 ### Membuat Projek Django Baru
@@ -112,10 +114,12 @@ python manage.py migrate
 ## Apakah ada feedback untuk asisten dosen tutorial 1 yang telah kamu kerjakan sebelumnya?
 - Asdos sudah sangat membantu saya dengan cara standby jika ada pertanyaan atau ada error pada program
 
+</details>
 
 
+<details>
+  <summary><strong>Tugas 3</strong></summary>
 
-# TUGAS 3
 ## Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 - Agar data dapat diakses di berbagai tempat (Client <-> Server), sehingga memungkinkan data tersebut bisa dikirim dari client ke server atau sebaliknya, lalu disimpan ke dalam database. Kegunaan lainnya termasuk dapat memperlihatkan data tersebut pada platform yang client gunakan.
 
@@ -194,10 +198,12 @@ python manage.py migrate
 
 - JSONByID:  
 ![showjsonById](https://drive.google.com/uc?export=view&id=1j3QGGluPukBRkFE1kNi4CSUL92B9VosY)
+</details>
 
 
+<details>
+  <summary><strong>Tugas 4</strong></summary>
 
-# TUGAS 4
 ## Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
 - Django AuthencticationForm adalah fungsi bawaan django yang berfungsi untuk proses "login" yang dilakukan oleh user, lalu akan diberikan form yang memiliki field username dan password. Setelah selesai, fungsi tersebut akan mengembalikan objek "user" dari user. 
 - Kelebihan dari Django AuthenticationForm adalah developer tidak perlu membuat form login baru, mudah dipakai, serta langsung terintegrasi dengan sistem django.
@@ -307,9 +313,11 @@ def logout_user(request):
 ```
 - Pada potongan kode tersebut, variabel logged diambil dari user yang sedang terlogin pada saat itu dan diambil usernamenya.
 - Sedangkan last_login adalah variabel yang mengambil waktu last_login dari cookies, ketika variabel tersebut ada isinya, maka ambil isi tersebut. Jika tidak ada isi, maka tampilkan 'Never"
+</details>
 
+<details>
+  <summary><strong>Tugas 5</strong></summary>
 
-# TUGAS 5
 ## Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
 - CSS selector memiliki hierarki pengambilan seperti ini:
 - 1. Kode dengan inline style `<p style="color: red;">Teks ini pasti merah</p>`
@@ -323,6 +331,7 @@ def logout_user(request):
 - Contoh Web yang sudah menerapkan responsive design adalah `https://scele.cs.ui.ac.id/`, web scele kita. Karena ketika disimulate, web tersebut responsif, dimana ukuran2 objeknya berubah untuk menyesuaikan layar hp. 
 ![SceleDesktop](https://drive.google.com/uc?export=view&id=1Gs-ExRU0-nifgXKCmDgHNa7B9lHjIRBP)
 ![SceleMobile](https://drive.google.com/uc?export=view&id=1Ib9xx4P3QXzN8xXluNaSVUQOka3oX7-k)
+
 - Contoh Web yang belum menerapkan responsive design adalah `https://www.tokopedia.com/`. Karena tidak ada perubahan ketika disimulasikan melalui hp, Tokopedia sepertinya sudah fokus pada dedicated appnya untuk platform mobile, jadi platform webnya ditinggalkan. 
 ![TokopediaDesktop](https://drive.google.com/uc?export=view&id=1cSBYWkpiO9ZFfmUNxqt9Bi-efdlldFbL)
 ![TokopediaMobile](https://drive.google.com/uc?export=view&id=1K_Teo42DjwFeEdfgG2j0OBV0qzt61ehu)
@@ -429,5 +438,11 @@ def delete_product(request, id):
         <div class="md:hidden flex items-center">
 ```
 - Yang dimana menu hamburger akan hide kalau screen adalah md atau lebih besar, dan show untuk layar yang lebih kecil daripada itu.
+</details>
+
+<details open>
+  <summary><strong>Tugas 6</strong></summary>
 
 
+
+</details>
