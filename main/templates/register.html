@@ -9,110 +9,153 @@
   <div class="min-h-screen bg-gray-50 flex items-center justify-center p-8">
     <div class="max-w-md w-full relative z-10">
       <div class="bg-white border border-gray-200 rounded-lg p-8 shadow-2xl">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-2">Join Us</h2>
-        <p class="text-gray-500">Create your Slop Shop account</p>
-      </div>
-
-      <!-- Form Errors Display -->
-      {% if form.non_field_errors %}
-        <div class="mb-6">
-          {% for error in form.non_field_errors %}
-            <div class="px-4 py-3 rounded text-sm border bg-red-50 border-red-200 text-red-700">
-              {{ error }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      {% if form.errors %}
-        <div class="mb-6">
-          {% for field, errors in form.errors.items %}
-            {% if field != '__all__' %}
-              {% for error in errors %}
-                <div class="px-4 py-3 rounded text-sm border bg-red-50 border-red-200 text-red-700 mb-2">
-                  <strong>{{ field|title }}:</strong> {{ error }}
-                </div>
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      <form method="POST" action="" class="space-y-5">
-        {% csrf_token %}
-        
-        <div>
-          <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-          <input 
-            id="username" 
-            name="username" 
-            type="text" 
-            required 
-            class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-green-500 transition duration-200" 
-            placeholder="Choose a username">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-semibold text-gray-900 mb-2">Join Us</h2>
+          <p class="text-gray-500">Create your SlopShop account</p>
         </div>
 
-        <div>
-          <label for="password1" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-          <input 
-            id="password1" 
-            name="password1" 
-            type="password" 
-            required 
-            class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-green-500 transition duration-200" 
-            placeholder="Create a password">
+        <form method="POST" action="" class="space-y-5" id="register-form" novalidate>
+          {% csrf_token %}
+
+          <!-- AJAX error box -->
+          <div id="ajax-errors" class="space-y-2" aria-live="polite"></div>
+
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <input id="username" name="username" type="text" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-green-500 transition duration-200"
+                   placeholder="Choose a username">
+          </div>
+
+          <div>
+            <label for="password1" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <input id="password1" name="password1" type="password" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-green-500 transition duration-200"
+                   placeholder="Create a password">
+          </div>
+
+          <div>
+            <label for="password2" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+            <input id="password2" name="password2" type="password" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-green-500 transition duration-200"
+                   placeholder="Confirm your password">
+          </div>
+
+          <button type="submit"
+                  class="w-full bg-green-600 text-white font-medium py-3 px-4 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200"
+                  id="submit-btn">
+            Create Account
+          </button>
+        </form>
+
+        {% if messages %}
+          <div class="mt-6">
+            {% for message in messages %}
+              <div class="px-4 py-3 rounded text-sm border
+                 {% if message.tags == 'success' %} bg-green-50 border-green-200 text-green-700
+                 {% elif message.tags == 'error' %} bg-red-50 border-red-200 text-red-700
+                 {% else %} bg-gray-50 border-gray-200 text-gray-700 {% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="mt-6 text-center">
+          <p class="text-gray-500 text-sm">
+            Already have an account?
+            <a href="{% url 'main:login' %}" class="text-green-600 hover:text-green-700 font-medium">Sign In</a>
+          </p>
         </div>
-
-        <div>
-          <label for="password2" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
-          <input 
-            id="password2" 
-            name="password2" 
-            type="password" 
-            required 
-            class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-green-500 transition duration-200" 
-            placeholder="Confirm your password">
-        </div>
-
-        <button 
-          type="submit" 
-          class="w-full bg-green-600 text-white font-medium py-3 px-4 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200">
-          Create Account
-        </button>
-      </form>
-
-      <!-- Messages Display -->
-      {% if messages %}
-        <div class="mt-6">
-          {% for message in messages %}
-            <div 
-              class="
-                px-4 py-3 rounded text-sm border
-                {% if message.tags == 'success' %}
-                  bg-green-50 border-green-200 text-green-700
-                {% elif message.tags == 'error' %}
-                  bg-red-50 border-red-200 text-red-700
-                {% else %}
-                  bg-gray-50 border-gray-200 text-gray-700
-                {% endif %}
-              ">
-              {{ message }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      <div class="mt-6 text-center">
-        <p class="text-gray-500 text-sm">
-          Already have an account? 
-          <a href="{% url 'main:login' %}" class="text-green-600 hover:text-green-700 font-medium">
-            Sign In
-          </a>
-        </p>
-      </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  const form = document.getElementById('register-form');
+  const btn  = document.getElementById('submit-btn');
+  const box  = document.getElementById('ajax-errors');
+  const usernameEl = document.getElementById('username');
+  const pw1El = document.getElementById('password1');
+  const pw2El = document.getElementById('password2');
+
+  let submitting = false;
+
+  function setLoading(s) {
+    btn.disabled = s;
+    btn.classList.toggle('opacity-70', s);
+    btn.textContent = s ? 'Creating…' : 'Create Account';
+  }
+
+  function renderErrors(data) {
+    box.innerHTML = '';
+    const errs = [];
+    if (data?.detail) errs.push(data.detail);
+    if (Array.isArray(data?.non_field_errors)) errs.push(...data.non_field_errors);
+    if (data?.errors && typeof data.errors === 'object') {
+      for (const [field, arr] of Object.entries(data.errors)) {
+        (arr || []).forEach(m => errs.push(`${field}: ${m}`));
+      }
+    }
+    if (errs.length) {
+      box.innerHTML = errs.map(msg => `
+        <div class="px-4 py-3 rounded text-sm border bg-red-50 border-red-200 text-red-700">${msg}</div>
+      `).join('');
+        showToast(errs[0], '', 'error');
+    }
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (submitting) return;
+    submitting = true;
+    renderErrors({});
+    setLoading(true);
+
+    const csrftoken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+    const payload = {
+      username: (usernameEl.value || '').trim(),
+      password1: pw1El.value || '',
+      password2: pw2El.value || '',
+    };
+
+    try {
+      const res = await fetch("{% url 'main:ajax_register' %}", {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.ok) {
+        renderErrors(data);
+        setLoading(false);
+        submitting = false;
+        return;
+      }
+
+      localStorage.setItem('slopshop:flash', JSON.stringify({
+        type: 'success',
+        title: 'Success',
+        message: data.message || 'Registrasi berhasil. Silakan login.'
+      }));
+
+      window.location.href = data.redirect_url;
+
+    } catch (err) {
+      renderErrors({ non_field_errors: ['Network error. Coba lagi.'] });
+      setLoading(false);
+      submitting = false;
+    }
+  });
+})();
+</script>
 {% endblock content %}

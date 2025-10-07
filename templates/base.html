@@ -1,23 +1,44 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% block meta %} {% endblock meta %}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Add DOMPurify here -->
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
-  </head>
-<body>
-<body>
-    {% block content %}
 
-    {% endblock %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% block meta %}{% endblock meta %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/global.css' %}" />
+</head>
 
-    {% include 'toast.html' %}
-    {% include 'modal.html' %}
+<body>
+  {% block content %}{% endblock %}
+
+  {% include 'toast.html' %}
+  {% include 'modal.html' %}
+  <script>
+    (function () {
+      const KEY = 'slopshop:flash';
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return;
+
+      try {
+        const payload = JSON.parse(raw);
+        const items = Array.isArray(payload) ? payload : [payload];
+        items.forEach(({ type = 'normal', title = 'Info', message = '' }) => {
+          if (typeof window.showToast !== 'function') return;
+
+          window.showToast(message, title, type, 3000);
+
+        });
+      } catch (e) {
+        console.warn('Invalid flash payload', e);
+      } finally {
+        localStorage.removeItem('slopshop:flash');
+      }
+    })();
+  </script>
+  {% block scripts %}{% endblock %}
 </body>
-</body>
+
 </html>

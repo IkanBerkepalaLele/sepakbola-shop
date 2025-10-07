@@ -443,6 +443,32 @@ def delete_product(request, id):
 <details open>
   <summary><strong>Tugas 6</strong></summary>
 
+## Apa perbedaan antara synchronous request dan asynchronous request?
+- Synchronous request adalah urutan pengeksekusian kode dari atas ke bawah, sehingga akan menghentikan eksekusi kode dibawahnya sampai respons atau fungsi tersebut selesai, yang menyebabkan UI hang, freeze dan tidak responsif.
+- contoh fungsi sync adalah fungsi kode yang mengembalikan value secara langsung function(){return (6 + 7)}.
+- Asynchronous request adalah urutan pengeksekusian kode berdasarkan urutan kedatangan hasil, contohnya dari fetch, jadi tidak menghentikan eksekusi kode dibawahnya, hasilnya UI pada web tidak akan ngefreeze pada saat fungsi async berjalan. 
+- contoh fungsi async adalah fungsi yang menngembalikan promise seperti await fetch.
 
+## Bagaimana AJAX bekerja di Django (alur request–response)?
+- ![AlurAJAX](https://techvidvan.com/tutorials/wp-content/uploads/2022/01/django-ajax.webp)
+- Sumber: TechVidvan
+- Pertama-tama suatu event pada UI akan memanggil fungsi AJAX yang akan fetch ke suatu endpoint. 
+- Ketika endpoint cocok, maka suatu fungsi di views.py akan dipanggil lalu mengembalikan berupa JSONResponse atau HTTP Response. 
+- fungsi AJAX di awal akan memproses response tersebut dan mengupdate DOM secara asinkronus.
+
+## Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+- UX Lebih baik karena UI tidak ngefreeze seperti di render.
+- Lebih cepat dan mengurangi bandwith yang keluar masuk karena cuma send/request JSON dibanding render yang kirim html secara full.
+- Adanya loading, empty, error state serta toast yang membuat user lebih paham dengan apa yang terjadi pada website.
+
+## Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+- Pastikan payload dikirim pada web yang mempunyai HTTPS agar payload terenkripsi.
+- Sertakan CSRF pada saat mengirim payload.
+- Gunakan fungsi bawaan dari Django seperti authenticate() untuk login dan UserCreationForm untuk register.
+- Implementasikan rate limit untuk login untuk mencegah brute-force attack.
+
+## Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+- Pengguna tidak perlu merasakan UI yang menjadi freeze dan tidak responsif pada saat menggunakan suatu fungsi, selain itu pengguna juga tidak usah merefresh suatu halaman jika suatu fungsi menggunakan AJAX.
+- Penambahan toast dan web state (empty, loading, error) dengan AJAX bisa memperjelas kondisi web sekarang pada pengguna.
 
 </details>

@@ -7,110 +7,230 @@
 {% endblock meta %}
 
 {% block content %}
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Back Navigation -->
-        <div class="mb-6">
-            <a href="{% url 'main:show_main' %}" class="text-black-300 hover:text-black font-medium transition-colors">
-                ← Back to Products
-            </a>
-        </div>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+  <!-- Back Navigation -->
+  <div class="mb-6">
+    <a href="{% url 'main:show_main' %}" class="text-black-300 hover:text-black font-medium transition-colors">
+      ← Back to Products
+    </a>
+  </div>
 
-        <!-- TODO -->
-        <!-- Loading State -->
-        <div id="loading-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
-            <svg class="animate-spin h-8 w-8 text-green-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-            </svg>
-            <p class="text-gray-600 mt-3">Loading Product detail...</p>
-        </div>
+  <!-- Loading State -->
+  <div id="loading-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+    <svg class="animate-spin h-8 w-8 text-green-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+    </svg>
+    <p class="text-gray-600 mt-3">Loading Product detail...</p>
+  </div>
 
-        <!-- Error State -->
-        <div id="error-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
-            <div class="w-16 h-16 mx-auto mb-4">
-                <div class="text-red-500 text-5xl">⚠️</div>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Failed to load Product</h3>
-            <p class="text-gray-500">Please try again later.</p>
-        </div>
-        
-        <!-- Article -->
-        <article class="bg-white rounded-lg border border-gray-200 shadow-2xl overflow-hidden">
-            
-            <!-- Header -->
-            <div class="p-6 sm:p-8">
-                <div class="flex flex-wrap items-center gap-2 mb-4">
-                    <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-green-600 text-white">
-                        {{ product.get_category_display }}
-                    </span>
-                    {% if product.is_featured %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-500 text-white">
-                            Featured
-                        </span>
-                    {% endif %}
-                    {% if product.stock <= 0 %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-red-600 text-white">
-                            OUT OF STOCK
-                        </span>
-                    {% endif %}
-                </div>
-                
-                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-6">
-                    {{ product.name }}
-                </h1>
-                
-                <!-- Price and Stock -->
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-200">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">Price</p>
-                        <p class="text-3xl font-bold text-green-600">Rp. {{ product.price|intcomma }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">Stock</p>
-                        <p class="text-2xl font-semibold {% if product.stock <= 0 %}text-red-600{% elif product.stock < 10 %}text-yellow-600{% else %}text-gray-900{% endif %}">
-                            {{ product.stock }} units
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Featured Image -->
-            {% if product.thumbnail %}
-                <div class="px-6 sm:px-8 mb-8">
-                    <img src="{{ product.thumbnail }}" 
-                         alt="{{ product.name }}" 
-                         class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
-                </div>
-            {% endif %}
-
-            <!-- Content -->
-            <div class="p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Description</h2>
-                <div class="prose prose-lg max-w-none">
-                    <div class="text-gray-700 leading-relaxed whitespace-pre-line text-base sm:text-lg">
-                        {{ product.description }}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Author Info -->
-            <div class="border-t border-gray-200 p-6 sm:p-8 bg-gray-50">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">Seller</p>
-                        <div class="font-medium text-gray-900">
-                            {% if product.user %}
-                                {{ product.user.username }}
-                            {% else %}
-                                Anonymous
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </article>
+  <!-- Error State -->
+  <div id="error-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+    <div class="w-16 h-16 mx-auto mb-4">
+      <div class="text-red-500 text-5xl">⚠️</div>
     </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">Failed to load Product</h3>
+    <p class="text-gray-500">Please try again later.</p>
+  </div>
+
+  <!-- PRODUCT (tetap UI yang sama, hanya ditambah id agar bisa di-update via JS) -->
+  <article id="product-content" class="bg-white rounded-lg border border-gray-200 shadow-2xl overflow-hidden hidden">
+
+    <!-- Header -->
+    <div class="p-6 sm:p-8">
+      <div id="badges-container" class="flex flex-wrap items-center gap-2 mb-4">
+        <!-- Server fallback badges -->
+        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-green-600 text-white">
+          {{ product.get_category_display }}
+        </span>
+        {% if product.is_featured %}
+          <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-500 text-white">
+            Featured
+          </span>
+        {% endif %}
+        {% if product.stock <= 0 %}
+          <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-red-600 text-white">
+            OUT OF STOCK
+          </span>
+        {% endif %}
+      </div>
+
+      <h1 id="product-title" class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-6">
+        {{ product.name }}
+      </h1>
+
+      <!-- Price and Stock -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-200">
+        <div>
+          <p class="text-sm text-gray-500 mb-1">Price</p>
+          <p class="text-3xl font-bold text-green-600">
+            <span>Rp. </span><span id="product-price-value">{{ product.price|intcomma }}</span>
+          </p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 mb-1">Stock</p>
+          <p id="product-stock-value"
+             class="text-2xl font-semibold {% if product.stock <= 0 %}text-red-600{% elif product.stock < 10 %}text-yellow-600{% else %}text-gray-900{% endif %}">
+            {{ product.stock }} units
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Image -->
+    {% if product.thumbnail %}
+      <div id="featured-image-container" class="px-6 sm:px-8 mb-8">
+        <img id="featured-image" src="{{ product.thumbnail }}" alt="{{ product.name }}"
+             class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
+      </div>
+    {% else %}
+      <div id="featured-image-container" class="px-6 sm:px-8 mb-8 hidden">
+        <img id="featured-image" src="" alt=""
+             class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
+      </div>
+    {% endif %}
+
+    <!-- Content -->
+    <div class="p-6 sm:p-8">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Description</h2>
+      <div class="prose prose-lg max-w-none">
+        <div id="product-description" class="text-gray-700 leading-relaxed whitespace-pre-line text-base sm:text-lg">
+          {{ product.description }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Seller -->
+    <div class="border-t border-gray-200 p-6 sm:p-8 bg-gray-50">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 mb-1">Seller</p>
+          <div id="product-seller" class="font-medium text-gray-900">
+            {% if product.user %}
+              {{ product.user.username }}
+            {% else %}
+              Anonymous
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
 </div>
+
+<script>
+// ===== Config =====
+const PRODUCT_ID = "{{ product.id }}";
+const PRODUCT_DETAIL_ENDPOINT = `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`
+  .replace('00000000-0000-0000-0000-000000000000', PRODUCT_ID);
+
+const loadingState = document.getElementById('loading-state');
+const errorState   = document.getElementById('error-state');
+const productCard  = document.getElementById('product-content');
+
+const badgesContainer   = document.getElementById('badges-container');
+const productTitleEl    = document.getElementById('product-title');
+const priceValueEl      = document.getElementById('product-price-value');
+const stockValueEl      = document.getElementById('product-stock-value');
+const imageContainerEl  = document.getElementById('featured-image-container');
+const imageEl           = document.getElementById('featured-image');
+const descriptionEl     = document.getElementById('product-description');
+const sellerEl          = document.getElementById('product-seller');
+
+function showState(state) {
+  loadingState.classList.toggle('hidden', state !== 'loading');
+  errorState.classList.toggle('hidden', state !== 'error');
+  productCard.classList.toggle('hidden', state !== 'ready');
+}
+
+function getCategoryLabel(code) {
+  const map = { jersey: 'Jersey', shoe: 'Shoe', accessory: 'Accessory', shorts: 'Shorts' };
+  return map[code] || code;
+}
+
+function formatRupiah(n) {
+  const x = Number(n ?? 0);
+  return Number.isFinite(x) ? new Intl.NumberFormat('id-ID').format(x) : '0';
+}
+
+function setStockColor(el, stock) {
+  el.classList.remove('text-red-600','text-yellow-600','text-gray-900');
+  if (stock <= 0) el.classList.add('text-red-600');
+  else if (stock < 10) el.classList.add('text-yellow-600');
+  else el.classList.add('text-gray-900');
+}
+
+// ===== Render =====
+function renderProduct(p) {
+  // Title & <title>
+  productTitleEl.textContent = p.name;
+  document.title = `${p.name} - ⚽ 🏆 Toko SlopShop ⚽ 🏆`;
+
+  // Badges
+  badgesContainer.innerHTML = '';
+  const cat = document.createElement('span');
+  cat.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-green-600 text-white';
+  cat.textContent = getCategoryLabel(p.category);
+  badgesContainer.appendChild(cat);
+
+  if (p.is_featured) {
+    const feat = document.createElement('span');
+    feat.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-500 text-white';
+    feat.textContent = 'Featured';
+    badgesContainer.appendChild(feat);
+  }
+  if ((p.stock ?? 0) <= 0) {
+    const oos = document.createElement('span');
+    oos.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-red-600 text-white';
+    oos.textContent = 'OUT OF STOCK';
+    badgesContainer.appendChild(oos);
+  }
+
+  // Price
+  priceValueEl.textContent = formatRupiah(p.price);
+
+  // Stock
+  const s = Number(p.stock ?? 0);
+  stockValueEl.textContent = `${s} units`;
+  setStockColor(stockValueEl, s);
+
+  // Image
+  if (p.thumbnail) {
+    imageEl.src = p.thumbnail;
+    imageEl.alt = p.name;
+    imageContainerEl.classList.remove('hidden');
+  } else {
+    imageEl.src = '';
+    imageEl.alt = '';
+    imageContainerEl.classList.add('hidden');
+  }
+
+  // Description & Seller
+  descriptionEl.textContent = p.description ?? '';
+  sellerEl.textContent = p.user_username || 'Anonymous';
+}
+
+// ===== Load =====
+async function loadProductDetail() {
+  try {
+    showState('loading');
+    const resp = await fetch(PRODUCT_DETAIL_ENDPOINT, { headers: { 'Accept': 'application/json' } });
+    if (!resp.ok) throw new Error('Failed to fetch product detail');
+    const data = await resp.json();
+    renderProduct(data);
+    showState('ready');
+  } catch (err) {
+    console.error(err);
+    showState('error');
+  }
+}
+
+function popopopop(){
+  showToast("Logout Berhasil", "", "success");
+}
+
+// Init
+loadProductDetail();
+</script>
 {% endblock content %}

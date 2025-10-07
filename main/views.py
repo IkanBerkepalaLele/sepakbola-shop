@@ -8,10 +8,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.http import require_POST, require_GET
 from django.urls import reverse
 from django.utils.html import strip_tags
+import json
 
 @login_required(login_url='/login')
 def show_main(request):
@@ -37,17 +38,17 @@ def show_main(request):
 
     return render(request, "main.html", context)
 
-def create_product(request):
-    form = ProductForm(request.POST or None)
+# def create_product(request):
+#     form = ProductForm(request.POST or None)
 
-    if form.is_valid() and request.method == "POST":
-        product_entry = form.save(commit = False)
-        product_entry.user = request.user
-        product_entry.save()
-        return redirect('main:show_main')
+#     if form.is_valid() and request.method == "POST":
+#         product_entry = form.save(commit = False)
+#         product_entry.user = request.user
+#         product_entry.save()
+#         return redirect('main:show_main')
 
-    context = {'form': form}
-    return render(request, "create_product.html", context)
+#     context = {'form': form}
+#     return render(request, "create_product.html", context)
 
 @login_required(login_url='/login')
 def show_product(request, id):
@@ -59,25 +60,25 @@ def show_product(request, id):
 
     return render(request, "product_detail.html", context)
 
-@login_required(login_url='/login')
-def edit_product(request, id):
-    product = get_object_or_404(Product, pk=id)
-    form = ProductForm(request.POST or None, instance=product)
-    if form.is_valid() and request.method == 'POST':
-        form.save()
-        return redirect('main:show_main')
+# @login_required(login_url='/login')
+# def edit_product(request, id):
+#     product = get_object_or_404(Product, pk=id)
+#     form = ProductForm(request.POST or None, instance=product)
+#     if form.is_valid() and request.method == 'POST':
+#         form.save()
+#         return redirect('main:show_main')
 
-    context = {
-        'form': form
-    }
+#     context = {
+#         'form': form
+#     }
 
-    return render(request, "edit_product.html", context)
+#     return render(request, "edit_product.html", context)
 
-@login_required(login_url='/login')
-def delete_product(request, id):
-    product = get_object_or_404(Product, pk=id)
-    product.delete()
-    return HttpResponseRedirect(reverse('main:show_main'))
+# @login_required(login_url='/login')
+# def delete_product(request, id):
+#     product = get_object_or_404(Product, pk=id)
+#     product.delete()
+#     return HttpResponseRedirect(reverse('main:show_main'))
 
 def show_xml(request):
      products_list = Product.objects.all()
@@ -129,11 +130,11 @@ def add_product_entry_ajax(request):
     name = strip_tags(request.POST.get("name")) # strip HTML tags!
     description = strip_tags(request.POST.get("description")) # strip HTML tags!
     category = request.POST.get("category")
-    thumbnail = request.POST.get("thumbnail")
+    thumbnail = strip_tags(request.POST.get("thumbnail"))
     is_featured = request.POST.get("is_featured") == 'on'  # checkbox handling
     user = request.user
-    price = request.POST.get("price")
-    stock = request.POST.get("stock")
+    price = strip_tags(request.POST.get("price"))
+    stock = strip_tags(request.POST.get("stock"))
 
     new_product = Product(
         name=name, 
@@ -159,10 +160,10 @@ def update_product_entry_ajax(request, pk):
     name = strip_tags(request.POST.get("name", product.name))
     description = strip_tags(request.POST.get("description", product.description))
     category = request.POST.get("category", product.category)
-    thumbnail = request.POST.get("thumbnail", product.thumbnail)
+    thumbnail = strip_tags(request.POST.get("thumbnail"))
     is_featured = request.POST.get("is_featured") == 'on'
-    price = request.POST.get("price")
-    stock = request.POST.get("stock")
+    price = strip_tags(request.POST.get("price"))
+    stock = strip_tags(request.POST.get("stock"))
 
     product.name = name
     product.description = description
@@ -193,33 +194,72 @@ def show_xml_by_id(request, product_id):
    except Product.DoesNotExist:
        return HttpResponse(status=404)
    
-def register(request):
-    form = UserCreationForm()
+@require_GET
+def register_page(request):
+    return render(request, 'register.html')
 
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been successfully created!')
-            return redirect('main:login')
-    context = {'form':form}
-    return render(request, 'register.html', context)
+@require_GET
+def login_page(request):
+   return render(request, 'login.html')
 
+@require_POST
+@csrf_protect
 def login_user(request):
-   if request.method == 'POST':
-      form = AuthenticationForm(data=request.POST)
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'detail': 'Invalid JSON body'}, status=400)
 
-      if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            response = HttpResponseRedirect(reverse("main:show_main"))
-            response.set_cookie('last_login', str(datetime.datetime.now()))
-            return response
+    username = (payload.get('username') or '').strip()
+    password = payload.get('password') or ''
+    form = AuthenticationForm(request, data={'username': username, 'password': password})
 
-   else:
-      form = AuthenticationForm(request)
-   context = {'form': form}
-   return render(request, 'login.html', context)
+    if form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        redirect_url = reverse("main:show_main")
+
+        response = JsonResponse({
+            'ok': True,
+            'redirect_url': redirect_url,
+            'message': 'Login berhasil. Selamat datang!'
+        })
+        response.set_cookie('last_login', str(datetime.datetime.now()))
+        return response
+
+    return JsonResponse({
+        'ok': False,
+        'errors': form.errors,                      
+        'non_field_errors': form.non_field_errors(), 
+    }, status=400)
+
+@require_POST
+@csrf_protect
+def register_user(request):
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'detail': 'Invalid JSON body'}, status=400)
+
+    data = {
+        'username': (payload.get('username') or '').strip(),
+        'password1': payload.get('password1') or '',
+        'password2': payload.get('password2') or '',
+    }
+
+    form = UserCreationForm(data)
+    if form.is_valid():
+        user = form.save()
+        redirect_url = reverse('main:login')
+        message = 'Registrasi berhasil. Silakan login.'
+
+        return JsonResponse({'ok': True, 'message': message, 'redirect_url': redirect_url})
+
+    return JsonResponse({
+        'ok': False,
+        'errors': form.errors,                       
+        'non_field_errors': form.non_field_errors(), 
+    }, status=400)
 
 def logout_user(request):
     logout(request)

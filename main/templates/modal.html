@@ -11,8 +11,10 @@
         <p class="text-sm text-gray-600 mt-1">Advertise your football product with the world</p>
       </div>
       <button type="button"
-        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-        onclick="hideModal()">
+        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center transition-all duration-200"
+        onclick="hideModal()" onmouseover="this.style.transform='scale(1.1)'"
+        onmouseout="this.style.transform='scale(1)'" onmousedown="this.style.transform='scale(0.95)'"
+        onmouseup="this.style.transform='scale(1.1)'">
         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd"
@@ -79,10 +81,18 @@
     <!-- Modal footer -->
     <div class="flex flex-col sm:flex-row gap-4 p-6 border-t border-gray-200 rounded-b">
       <button type="button" id="cancelButton"
-        class="order-2 sm:order-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 transition-colors text-center"
-        onclick="hideModal()">Cancel</button>
+        class="order-2 sm:order-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 transition-all duration-200 text-center"
+        onclick="hideModal()"
+        onmouseover="this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'; this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'"
+        onmousedown="this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)'; this.style.transform='translateY(0)'"
+        onmouseup="this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'; this.style.transform='translateY(-2px)'">Cancel</button>
       <button type="submit" id="submitProduct" form="productForm"
-        class="order-1 sm:order-2 flex-1 bg-green-600 text-white px-6 py-3 rounded-md font-medium hover:bg-green-700 transition-colors">Advertise
+        class="order-1 sm:order-2 flex-1 bg-green-600 text-white px-6 py-3 rounded-md font-medium hover:bg-green-700 transition-all duration-200"
+        onmouseover="this.style.boxShadow='0 4px 12px rgba(22, 163, 74, 0.4)'; this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'"
+        onmousedown="this.style.boxShadow='0 2px 4px rgba(22, 163, 74, 0.3)'; this.style.transform='translateY(0)'"
+        onmouseup="this.style.boxShadow='0 4px 12px rgba(22, 163, 74, 0.4)'; this.style.transform='translateY(-2px)'">Advertise
         Product</button>
     </div>
   </div>
@@ -94,7 +104,10 @@
     style="background: white; border-radius: 16px; padding: 40px; width: 90%; max-width: 500px; position: relative; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);">
 
     <button onclick="closeConfirmModal()"
-      style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 28px; color: #999; cursor: pointer; width: 32px; height: 32px;">
+      style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 28px; color: #999; cursor: pointer; width: 32px; height: 32px; transition: all 0.2s ease;"
+      onmouseover="this.style.color='#333'; this.style.transform='scale(1.1)'"
+      onmouseout="this.style.color='#999'; this.style.transform='scale(1)'"
+      onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1.1)'">
       ×
     </button>
 
@@ -112,11 +125,19 @@
 
     <div style="display: flex; gap: 16px;">
       <button onclick="closeConfirmModal()"
-        style="flex: 1; padding: 14px; border: 1px solid #ddd; background: white; color: #333; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer;">
+        style="flex: 1; padding: 14px; border: 1px solid #ddd; background: white; color: #333; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s ease;"
+        onmouseover="this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'; this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'"
+        onmousedown="this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)'; this.style.transform='translateY(0)'"
+        onmouseup="this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'; this.style.transform='translateY(-2px)'">
         Cancel
       </button>
       <button onclick="confirmDelete()"
-        style="flex: 1; padding: 14px; border: none; background: #dc3545; color: white; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer;">
+        style="flex: 1; padding: 14px; border: none; background: #dc3545; color: white; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s ease;"
+        onmouseover="this.style.boxShadow='0 4px 12px rgba(220, 53, 69, 0.4)'; this.style.transform='translateY(-2px)'; this.style.background='#c82333'"
+        onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'; this.style.background='#dc3545'"
+        onmousedown="this.style.boxShadow='0 2px 4px rgba(220, 53, 69, 0.3)'; this.style.transform='translateY(0)'"
+        onmouseup="this.style.boxShadow='0 4px 12px rgba(220, 53, 69, 0.4)'; this.style.transform='translateY(-2px)'">
         Confirm
       </button>
     </div>
@@ -141,7 +162,6 @@
   }
 
   function showEditModal(product) {
-    // product = {id, name, description, category, thumbnail, is_featured}
     editingId = product.id;
     document.getElementById('product_id').value = product.id;
     document.getElementById('title').value = product.name;
@@ -161,14 +181,12 @@
     const formEl = document.querySelector('#productForm');
     const fd = new FormData(formEl);
 
-    // Map field agar backend menerima "name"/"description"
     fd.set('name', fd.get('title') || '');
     fd.set('description', fd.get('content') || '');
 
     // Checkbox
     fd.set('is_featured', document.getElementById('is_featured').checked ? 'on' : '');
 
-    // Tentukan URL: create saat editingId null, update kalau ada editingId
     const url = editingId
       ? `{% url 'main:update_product_entry_ajax' '00000000-0000-0000-0000-000000000000' %}`
         .replace('00000000-0000-0000-0000-000000000000', editingId)
@@ -261,7 +279,7 @@
       showToast('Product deleted successfully!', '', 'success');
       document.dispatchEvent(new CustomEvent('productDeleted'));
     } else {
-      showToast('Delete failed', 'Server error', 'error');
+      showToast('Delete failed', '', 'error');
     }
     closeConfirmModal();
   }
