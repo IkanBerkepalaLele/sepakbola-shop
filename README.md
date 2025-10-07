@@ -450,7 +450,7 @@ def delete_product(request, id):
 - contoh fungsi async adalah fungsi yang menngembalikan promise seperti await fetch.
 
 ## Bagaimana AJAX bekerja di Django (alur request–response)?
-- ![AlurAJAX](https://techvidvan.com/tutorials/wp-content/uploads/2022/01/django-ajax.webp)
+- ![AlurAJAX](https://cdn.discordapp.com/attachments/769801247989301250/1425175363658715238/django-ajax.png?ex=68e6a17d&is=68e54ffd&hm=730fdacbd4ac659e63a52babac53b4882e4fc852e5a5befa95ec4a462ff3d258&)
 - Sumber: TechVidvan
 - Pertama-tama suatu event pada UI akan memanggil fungsi AJAX yang akan fetch ke suatu endpoint. 
 - Ketika endpoint cocok, maka suatu fungsi di views.py akan dipanggil lalu mengembalikan berupa JSONResponse atau HTTP Response. 
