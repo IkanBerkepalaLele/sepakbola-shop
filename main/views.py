@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.urls import reverse
 from django.utils.html import strip_tags
 import json
+import requests
 
 @login_required(login_url='/login')
 def show_main(request):
@@ -38,17 +39,6 @@ def show_main(request):
 
     return render(request, "main.html", context)
 
-# def create_product(request):
-#     form = ProductForm(request.POST or None)
-
-#     if form.is_valid() and request.method == "POST":
-#         product_entry = form.save(commit = False)
-#         product_entry.user = request.user
-#         product_entry.save()
-#         return redirect('main:show_main')
-
-#     context = {'form': form}
-#     return render(request, "create_product.html", context)
 
 @login_required(login_url='/login')
 def show_product(request, id):
@@ -59,26 +49,6 @@ def show_product(request, id):
     }
 
     return render(request, "product_detail.html", context)
-
-# @login_required(login_url='/login')
-# def edit_product(request, id):
-#     product = get_object_or_404(Product, pk=id)
-#     form = ProductForm(request.POST or None, instance=product)
-#     if form.is_valid() and request.method == 'POST':
-#         form.save()
-#         return redirect('main:show_main')
-
-#     context = {
-#         'form': form
-#     }
-
-#     return render(request, "edit_product.html", context)
-
-# @login_required(login_url='/login')
-# def delete_product(request, id):
-#     product = get_object_or_404(Product, pk=id)
-#     product.delete()
-#     return HttpResponseRedirect(reverse('main:show_main'))
 
 def show_xml(request):
      products_list = Product.objects.all()
@@ -266,3 +236,52 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def proxy_image(request):
+    image_url = request.GET.get('url')
+    if not image_url:
+        return HttpResponse('No URL provided', status=400)
+    
+    try:
+        # Fetch image from external source
+        response = requests.get(image_url, timeout=10)
+        response.raise_for_status()
+        
+        # Return the image with proper content type
+        return HttpResponse(
+            response.content,
+            content_type=response.headers.get('Content-Type', 'image/jpeg')
+        )
+    except requests.RequestException as e:
+        return HttpResponse(f'Error fetching image: {str(e)}', status=500)
+
+#TODO Change to product model
+@csrf_exempt
+def create_news_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        name = strip_tags(data.get("name", ""))
+        description = strip_tags(data.get("description", ""))
+        category = data.get("category", "")
+        thumbnail = strip_tags(data.get("thumbnail", ""))
+        is_featured = data.get("is_featured", False)
+        price = strip_tags(data.get("price", 0))
+        stock = strip_tags(data.get("stock", 0))
+        user = request.user
+        
+        new_product = Product(
+            name=name, 
+            description=description,
+            category=category,
+            thumbnail=thumbnail,
+            is_featured=is_featured,
+            price=price,
+            stock=stock,
+            user=user
+        )
+        new_product.save()
+        
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
