@@ -243,8 +243,13 @@ def proxy_image(request):
         return HttpResponse('No URL provided', status=400)
     
     try:
+        # Add headers to mimic browser request
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        
         # Fetch image from external source
-        response = requests.get(image_url, timeout=10)
+        response = requests.get(image_url, headers=headers, timeout=10)
         response.raise_for_status()
         
         # Return the image with proper content type
@@ -253,9 +258,9 @@ def proxy_image(request):
             content_type=response.headers.get('Content-Type', 'image/jpeg')
         )
     except requests.RequestException as e:
-        return HttpResponse(f'Error fetching image: {str(e)}', status=500)
-
-#TODO Change to product model
+        # Return proper error instead of HTML
+        return HttpResponse(status=404)  # Return 404 instead of 500 with HTML
+    
 @csrf_exempt
 def create_news_flutter(request):
     if request.method == 'POST':

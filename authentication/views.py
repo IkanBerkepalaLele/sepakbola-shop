@@ -20,7 +20,8 @@ def login(request):
             return JsonResponse({
                 "username": user.username,
                 "status": True,
-                "message": "Login successful!"
+                "message": "Login successful!",
+                "userId": user.id
                 # Add other data if you want to send data to Flutter.
             }, status=200)
         else:

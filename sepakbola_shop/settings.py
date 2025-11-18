@@ -38,12 +38,10 @@ CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 CORS_ALLOW_ALL_ORIGINS = True  # Untuk development
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "ghozam-muliawan-sepakbolashop.pbp.cs.ui.ac.id", "10.0.2.2"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1" , "ghozam-muliawan-sepakbolashop.pbp.cs.ui.ac.id", "10.0.2.2"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://ghozam-muliawan-sepakbolashop.pbp.cs.ui.ac.id",
-    "authentication",
-    "corsheaders",
 
 ]
 
@@ -60,10 +58,11 @@ INSTALLED_APPS = [
     'main',
     'django.contrib.humanize',
     "authentication",
-    
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,7 +72,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'sepakbola_shop.urls'
